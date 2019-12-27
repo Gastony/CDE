@@ -41,7 +41,7 @@ public class Update extends javax.swing.JPanel {
         generateGatepass(12);
       //Fillinfo();
       populateCustomer();
-        populateCoolerType();
+        Fillcombo();
     
  
   
@@ -312,25 +312,27 @@ public class Update extends javax.swing.JPanel {
                 String value7=Gate_pass_jTextField.getText();
                String str=customer_jComboBox.getSelectedItem().toString();
                 String value8=OutletNumber_jTextField.getText();
+                 
                 Connection con = DBConn.myConn();
                 PreparedStatement stmt = con.prepareStatement("UPDATE loan_coooler SET outlet_tag=? ,cooler_type=?,serial_no=?,approved_by_contlr=1 WHERE outlet_owner=? AND outlet_no=?");
                 stmt.setString(1, value1);
             
-                stmt.setString(2, value4);
-                stmt.setString(3, value6);
+                stmt.setString(2, value6);
+                stmt.setString(3, value4);
                 stmt.setString(4, str);
                 stmt.setString(5, value8);
 
                 int rs = stmt.executeUpdate();
 
-                PreparedStatement stmt2 = con.prepareStatement("UPDATE coolers SET cooler_tag=? ,cooler_asset_number=?,is_rented =1 WHERE cooler_sn = ?");
+                PreparedStatement stmt2 = con.prepareStatement("UPDATE coolers SET cooler_tag=? ,cooler_asset_number=?,cooler_sn=?,is_rented =1 WHERE cooler_type = ?");
                 stmt2.setString(1, value3);
 
 
                 stmt2.setString(2, value5);
-                stmt2.setString(3, value6);
+                  stmt2.setString(3, value4);
+                stmt2.setString(4, value6);
                 PreparedStatement stmt3 = con.prepareStatement("INSERT INTO vtrack_release_info(cooler_sn,gate_pass,request_id,release_date) VALUES(?,?,(SELECT  ln_col_id FROM loan_coooler WHERE outlet_owner=? AND outlet_no=?),now()) ");
-                stmt3.setString(1, value6);
+                stmt3.setString(1, value4);
                 stmt3.setString(2, value7);
                 stmt3.setString(3, str);
                 stmt3.setString(4, value8);
@@ -383,7 +385,7 @@ Fillinfo();        // TODO add your handling code here:
     }//GEN-LAST:event_customer_jComboBoxActionPerformed
 
     private void coolerType_comboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coolerType_comboboxActionPerformed
- populateCoolerType();        // TODO add your handling code here:
+ Fillcombo();        // TODO add your handling code here:
     }//GEN-LAST:event_coolerType_comboboxActionPerformed
 private void Fillcombo(){
 try{
@@ -479,25 +481,7 @@ JOptionPane.showMessageDialog(null,e);
 
 }
 
-private void populateCoolerType(){
-try{
-String str=coolerType_combobox.getSelectedItem().toString();
-String sql = "SELECT * FROM coolers WHERE cooler_type=?";
-Connection con = DBConn.myConn();
-PreparedStatement pst = con.prepareStatement(sql);
- pst.setString(1, str);
-ResultSet rs = pst.executeQuery();
-while(rs.next()){
-String name = rs.getString("cooler_sn");
-serial_jTextField.setText(name);
-}
 
-}
-catch(Exception e){
-JOptionPane.showMessageDialog(null,e);
-}
-
-}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
