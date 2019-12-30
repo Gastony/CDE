@@ -82,7 +82,7 @@ public class Reports extends javax.swing.JPanel {
             }
         });
 
-        export_jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EXPORT REPORTS", "Customer_Info", "Declined_Coolers", "Pending_Coolers", "Approved_Coolers", "Delivered_Coolers", "Defective_Coolers" }));
+        export_jComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EXPORT REPORTS", "Orders", "Declined", "Pending", "Approved", "Gatepass", "Shipping", "Delivered", "Maintenance" }));
         export_jComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 export_jComboBoxActionPerformed(evt);
@@ -224,21 +224,27 @@ for (int i = 0; i < jTable1.getModel().getColumnCount(); i++) {
 
     private void export_jComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export_jComboBoxActionPerformed
  Object item = export_jComboBox.getSelectedItem();
-                    if ("Customer_Info".equals(item)) {
-                       customer_info();
-                    } else if ("Declined_Coolers".equals(item)) {
+                    if ("Orders".equals(item)) {
+                       Orders();
+                    } else if ("Declined".equals(item)) {
                      declinedCoolers();
                     }
-                    else if ("Pending_Coolers".equals(item)) {
+                    else if ("Pending".equals(item)) {
                     pendingCoolers();
                     }
-                    else if ("Approved_Coolers".equals(item)) {
+                    else if ("Approved".equals(item)) {
                         approvedCoolers();
                     }
-                    else if ("Delivered_Coolers".equals(item)) {
+                     else if ("Gatepass".equals(item)) {
+                        Gatepass();
+                    }
+                      else if ("Shipping".equals(item)) {
+                        Shipping();
+                    }
+                    else if ("Delivered".equals(item)) {
                    deliveredCoolers();
                     }
-                    else if ("Defective_Coolers".equals(item)) {
+                    else if ("Maintenance".equals(item)) {
                       defectiveCoolers();
                     }
                     else   {
@@ -251,30 +257,26 @@ for (int i = 0; i < jTable1.getModel().getColumnCount(); i++) {
 
     
     
-private void customer_info(){
+private void Orders(){
 
  try{
  
             Connection con = DBConn.myConn();
             Statement statement = con.createStatement();
             FileOutputStream fileOut;
-            fileOut = new FileOutputStream("CUSTOMER.xls");
+            fileOut = new FileOutputStream("All Orders.xls");
             HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet worksheet = workbook.createSheet("Customer Info");
+            HSSFSheet worksheet = workbook.createSheet("All Orders");
             Row row1 = worksheet.createRow((short)0);
-            row1.createCell(0).setCellValue("DOCUMENT NUMBER");
-            row1.createCell(1).setCellValue("CONTRACT NUMBER");
-             row1.createCell(2).setCellValue("OUTLET NAME");
-              row1.createCell(3).setCellValue("OUTLET OWNER NAME");
+            row1.createCell(0).setCellValue("OUTLET OWNER");
+            row1.createCell(1).setCellValue("OUTLET NAME");
+             row1.createCell(2).setCellValue("OUTLET NUMBER");
+              row1.createCell(3).setCellValue("STREET");
                row1.createCell(4).setCellValue("LOCATION/AREA");
-                  row1.createCell(5).setCellValue("STREET");
-            row1.createCell(6).setCellValue("TO/NEXT TO");
-             row1.createCell(7).setCellValue("ROUTE NAME");
-              row1.createCell(8).setCellValue("EMPTIES");
-               row1.createCell(9).setCellValue("ORDER(TWICE COOLER CAPACITY)");
-                  row1.createCell(10).setCellValue("MOTIVATION");
-            row1.createCell(11).setCellValue("REQUEST DATE");
-             row1.createCell(12).setCellValue("STATUS");
+                  row1.createCell(5).setCellValue("SALES REP NAME");
+            row1.createCell(6).setCellValue("OCCD NAME");
+             row1.createCell(7).setCellValue("COOLER STATUS");
+             
               
               
             Row row2 ;
@@ -282,7 +284,8 @@ private void customer_info(){
 int rs1 = stmt1.executeUpdate();
 System.out.println(rs1+" records affected");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT doc_no,contract_no,outlet_name,outlet_owner,location,street,next_to,route,empties,order_no,recomendations,request_date,cooler_status FROM loanCoolerView");
+            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,street,location,sales_rep_name,occd_name,cooler_status FROM loanCoolerView L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id");
+      
             
             while(rs.next()){
                 int a = rs.getRow();
@@ -295,11 +298,6 @@ System.out.println(rs1+" records affected");
                 row2.createCell(5).setCellValue(rs.getString(6));
                 row2.createCell(6).setCellValue(rs.getString(7));
                 row2.createCell(7).setCellValue(rs.getString(8));
-                row2.createCell(8).setCellValue(rs.getString(9));
-                row2.createCell(9).setCellValue(rs.getString(10));
-                row2.createCell(10).setCellValue(rs.getString(11));
-                row2.createCell(11).setCellValue(rs.getString(12));
-                row2.createCell(12).setCellValue(rs.getString(13));
                
                 
             }
@@ -336,15 +334,18 @@ private void declinedCoolers(){
             row1.createCell(1).setCellValue("OUTLET NAME");
              row1.createCell(2).setCellValue("OUTLET NUMBER");
               row1.createCell(3).setCellValue("STREET");
-               row1.createCell(4).setCellValue("NEXT TO");
-                  row1.createCell(5).setCellValue("REQUEST DATE");
-            row1.createCell(6).setCellValue("REJECT REASON");
+               row1.createCell(4).setCellValue("LOCATION");
+                  row1.createCell(5).setCellValue("SALES REP NAME");
+            row1.createCell(6).setCellValue("OCCD NAME");
+              row1.createCell(7).setCellValue("REQUEST DATE");
+                row1.createCell(8).setCellValue("REJECT REASON");
             
               
             Row row2 ;
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,street,next_to,request_date,reject_reason FROM loan_coooler l JOIN rejected_loan_cooler r ON l.ln_col_id = r.loan_cooler_id where approved_by_asm =2 OR approved_by_rsm=2");
             
+            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,street,location,sales_rep_name,occd_name,request_date,reject_reason FROM loan_coooler L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id JOIN rejected_loan_cooler r ON L.ln_col_id = r.loan_cooler_id WHERE approved_by_asm =2 OR approved_by_rsm=2");
+
             while(rs.next()){
                 int a = rs.getRow();
                 row2 = worksheet.createRow((short)a);
@@ -355,6 +356,8 @@ private void declinedCoolers(){
                 row2.createCell(4).setCellValue(rs.getString(5));
                 row2.createCell(5).setCellValue(rs.getString(6));
                 row2.createCell(6).setCellValue(rs.getString(7));
+                 row2.createCell(7).setCellValue(rs.getString(8));
+                  row2.createCell(8).setCellValue(rs.getString(9));
               
                 
             }
@@ -390,16 +393,19 @@ private void pendingCoolers(){
             HSSFSheet worksheet = workbook.createSheet("Pending Coolers");
             Row row1 = worksheet.createRow((short)0);
             row1.createCell(0).setCellValue("OUTLET OWNER");
-            row1.createCell(1).setCellValue("OUTLET NUMBER");
-             row1.createCell(2).setCellValue("NEXT TO");
-              row1.createCell(3).setCellValue("SALES REP NAME");
-               row1.createCell(4).setCellValue("REQUEST DATE");
+            row1.createCell(1).setCellValue("OUTLET NAME");
+             row1.createCell(2).setCellValue("OUTLET NUMBER");
+              row1.createCell(3).setCellValue("STREET");
+               row1.createCell(4).setCellValue("LOCATION");
+                row1.createCell(5).setCellValue("SALES REP NAME");
+                 row1.createCell(6).setCellValue("OCCD NAME");
                  
             
               
             Row row2 ;
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_no,next_to,sales_rep_name,request_date FROM loan_coooler l JOIN sales_rep s ON l.sales_rep_id=s.sales_rep_id where approved_by_asm =0 OR approved_by_rsm=0");
+            
+ ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,street,location,sales_rep_name,occd_name FROM loan_coooler L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id WHERE approved_by_asm =0 OR approved_by_rsm=0");
             
             while(rs.next()){
                 int a = rs.getRow();
@@ -409,6 +415,8 @@ private void pendingCoolers(){
                 row2.createCell(2).setCellValue(rs.getString(3));
                 row2.createCell(3).setCellValue(rs.getString(4));
                 row2.createCell(4).setCellValue(rs.getString(5));
+                row2.createCell(5).setCellValue(rs.getString(6));
+                row2.createCell(6).setCellValue(rs.getString(7));
                
                 
             }
@@ -442,17 +450,21 @@ private void approvedCoolers(){
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet worksheet = workbook.createSheet("Approved Coolers");
             Row row1 = worksheet.createRow((short)0);
+            
             row1.createCell(0).setCellValue("OUTLET OWNER");
-            row1.createCell(1).setCellValue("OUTLET NUMBER");
-             row1.createCell(2).setCellValue("NEXT TO");
-              row1.createCell(3).setCellValue("SALES REP NAME");
-               row1.createCell(4).setCellValue("REQUEST DATE");
+            row1.createCell(1).setCellValue("OUTLET NAME");
+             row1.createCell(2).setCellValue("OUTLET NUMBER");
+              row1.createCell(3).setCellValue("STREET");
+               row1.createCell(4).setCellValue("LOCATION");
+                row1.createCell(5).setCellValue("SALES REP NAME");
+                 row1.createCell(6).setCellValue("OCCD NAME");
                  
             
               
             Row row2 ;
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_no,next_to,sales_rep_name,request_date FROM loan_coooler l JOIN sales_rep s ON l.sales_rep_id=s.sales_rep_id where approved_by_asm =1 AND approved_by_rsm=1 AND approved_by_contlr=0");
+            
+            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,street,location,sales_rep_name,occd_name FROM loan_coooler L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id WHERE approved_by_asm =1 AND approved_by_rsm=1 AND approved_by_contlr=0");
             
             while(rs.next()){
                 int a = rs.getRow();
@@ -462,6 +474,8 @@ private void approvedCoolers(){
                 row2.createCell(2).setCellValue(rs.getString(3));
                 row2.createCell(3).setCellValue(rs.getString(4));
                 row2.createCell(4).setCellValue(rs.getString(5));
+                  row2.createCell(5).setCellValue(rs.getString(6));
+                row2.createCell(6).setCellValue(rs.getString(7));
                
                 
             }
@@ -500,13 +514,16 @@ private void deliveredCoolers(){
              row1.createCell(2).setCellValue("OUTLET NUMBER");
               row1.createCell(3).setCellValue("OUTLET NAME");
                row1.createCell(4).setCellValue("LOCATION");
- row1.createCell(5).setCellValue("STREET");
+ row1.createCell(5).setCellValue("SALES REP NAME");
+  row1.createCell(6).setCellValue("OCCD NAME");
                  
             
               
             Row row2 ;
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT v.cooler_sn, l.cooler_type,outlet_no,outlet_name,location,street FROM vtrack_release_info v  JOIN loan_coooler l ON v.request_id = l.ln_col_id WHERE is_delivered=1");
+            ResultSet rs = stmt.executeQuery("SELECT v.cooler_sn, L.cooler_type,outlet_no,outlet_name,location,sales_rep_name,occd_name FROM vtrack_release_info v  JOIN loan_coooler L ON v.request_id = L.ln_col_id JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id WHERE is_delivered=1");
+            
+            
             while(rs.next()){
                 int a = rs.getRow();
                 row2 = worksheet.createRow((short)a);
@@ -516,6 +533,7 @@ private void deliveredCoolers(){
                 row2.createCell(3).setCellValue(rs.getString(4));
                 row2.createCell(4).setCellValue(rs.getString(5));
  row2.createCell(5).setCellValue(rs.getString(6));
+  row2.createCell(6).setCellValue(rs.getString(7));
                
                 
             }
@@ -552,11 +570,11 @@ private void defectiveCoolers(){
             row1.createCell(0).setCellValue("OUTLET NAME");
             row1.createCell(1).setCellValue("OUTLET NUMBER");
              row1.createCell(2).setCellValue("STREET");
-              row1.createCell(3).setCellValue("NEAR TO");
-               row1.createCell(4).setCellValue("COOLER TYPE");
- row1.createCell(5).setCellValue("SALES REP NAME");
- row1.createCell(6).setCellValue("OCCD NAME");
- row1.createCell(7).setCellValue("COOLER STATUS");
+              
+               row1.createCell(3).setCellValue("COOLER TYPE");
+ row1.createCell(4).setCellValue("SALES REP NAME");
+ row1.createCell(5).setCellValue("OCCD NAME");
+ row1.createCell(6).setCellValue("COOLER STATUS");
                  
             
               
@@ -565,7 +583,7 @@ private void defectiveCoolers(){
 int rs1 = stmt1.executeUpdate();
 System.out.println(rs1+" records affected");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT outlet_name,outlet_no,street,near_to,cooler_type,sales_rep_name,occd_name,cooler_status FROM maintenanceCoolerView M JOIN sales_rep S ON M.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id");
+            ResultSet rs = stmt.executeQuery("SELECT outlet_name,outlet_no,street,cooler_type,sales_rep_name,occd_name,cooler_status FROM maintenanceCoolerView M JOIN sales_rep S ON M.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id");
             
             while(rs.next()){
                 int a = rs.getRow();
@@ -577,7 +595,7 @@ System.out.println(rs1+" records affected");
                 row2.createCell(4).setCellValue(rs.getString(5));
  row2.createCell(5).setCellValue(rs.getString(6));
 row2.createCell(6).setCellValue(rs.getString(7));
-row2.createCell(7).setCellValue(rs.getString(8));
+
                
                 
             }
@@ -597,6 +615,137 @@ row2.createCell(7).setCellValue(rs.getString(8));
 
 
 }
+
+
+
+private void Gatepass(){
+
+ try{
+ 
+            Connection con = DBConn.myConn();
+            Statement statement = con.createStatement();
+            FileOutputStream fileOut;
+            fileOut = new FileOutputStream("DEFECTIVE.xls");
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Defective Coolers");
+            Row row1 = worksheet.createRow((short)0);
+            row1.createCell(0).setCellValue("OUTLET OWNER");
+            row1.createCell(1).setCellValue("OUTLET NAME");
+            row1.createCell(2).setCellValue("OUTLET NUMBER");
+      
+              
+               row1.createCell(3).setCellValue("COOLER TYPE");
+                row1.createCell(4).setCellValue("LOCATION");
+ row1.createCell(5).setCellValue("SALES REP NAME");
+ row1.createCell(6).setCellValue("OCCD NAME");
+
+                 
+            
+              
+            Row row2 ;
+           
+            Statement stmt = con.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,cooler_type,location,sales_rep_name,occd_name FROM loan_coooler L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id WHERE approved_by_asm =1 AND approved_by_rsm=1 AND approved_by_contlr=1  AND approve_by_fmanager=0");
+            
+            while(rs.next()){
+                int a = rs.getRow();
+                row2 = worksheet.createRow((short)a);
+                row2.createCell(0).setCellValue(rs.getString(1));
+                row2.createCell(1).setCellValue(rs.getString(2));
+                row2.createCell(2).setCellValue(rs.getString(3));
+                row2.createCell(3).setCellValue(rs.getString(4));
+                row2.createCell(4).setCellValue(rs.getString(5));
+ row2.createCell(5).setCellValue(rs.getString(6));
+row2.createCell(6).setCellValue(rs.getString(7));
+
+               
+                
+            }
+            workbook.write(fileOut);
+            fileOut.flush();
+            fileOut.close();
+            rs.close();
+            statement.close();
+            con.close();
+             JOptionPane.showMessageDialog(null, "Records successful Exported");
+           
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }catch(IOException ioe){
+            System.out.println(ioe);
+        }
+
+
+}
+
+
+
+
+private void Shipping(){
+
+ try{
+ 
+            Connection con = DBConn.myConn();
+            Statement statement = con.createStatement();
+            FileOutputStream fileOut;
+            fileOut = new FileOutputStream("DEFECTIVE.xls");
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Defective Coolers");
+            Row row1 = worksheet.createRow((short)0);
+            row1.createCell(0).setCellValue("OUTLET OWNER");
+            row1.createCell(1).setCellValue("OUTLET NAME");
+            row1.createCell(2).setCellValue("OUTLET NUMBER");
+      
+              
+               row1.createCell(3).setCellValue("COOLER TYPE");
+                row1.createCell(4).setCellValue("LOCATION");
+ row1.createCell(5).setCellValue("SALES REP NAME");
+ row1.createCell(6).setCellValue("OCCD NAME");
+
+                 
+            
+              
+            Row row2 ;
+           
+            Statement stmt = con.createStatement();
+            
+            ResultSet rs = stmt.executeQuery("SELECT outlet_owner,outlet_name,outlet_no,cooler_type,location,sales_rep_name,occd_name FROM loan_coooler L JOIN sales_rep S ON L.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id WHERE approved_by_asm =1 AND approved_by_rsm=1 AND approved_by_contlr=1 AND approve_by_fmanager=1");
+            
+            while(rs.next()){
+                int a = rs.getRow();
+                row2 = worksheet.createRow((short)a);
+                row2.createCell(0).setCellValue(rs.getString(1));
+                row2.createCell(1).setCellValue(rs.getString(2));
+                row2.createCell(2).setCellValue(rs.getString(3));
+                row2.createCell(3).setCellValue(rs.getString(4));
+                row2.createCell(4).setCellValue(rs.getString(5));
+ row2.createCell(5).setCellValue(rs.getString(6));
+row2.createCell(6).setCellValue(rs.getString(7));
+
+               
+                
+            }
+            workbook.write(fileOut);
+            fileOut.flush();
+            fileOut.close();
+            rs.close();
+            statement.close();
+            con.close();
+             JOptionPane.showMessageDialog(null, "Records successful Exported");
+           
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }catch(IOException ioe){
+            System.out.println(ioe);
+        }
+
+
+}
+
+
+
+
 
 
 

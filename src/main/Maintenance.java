@@ -48,7 +48,7 @@ public class Maintenance extends javax.swing.JPanel implements
 int rs1 = stmt1.executeUpdate();
 System.out.println(rs1+" records affected");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT outlet_name,outlet_no,street,near_to,cooler_type,sales_rep_name,occd_name,cooler_status FROM maintenanceCoolerView M JOIN sales_rep S ON M.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id");
+            ResultSet rs = stmt.executeQuery("SELECT outlet_name,outlet_no,street,cooler_type,sales_rep_name,occd_name,cooler_status FROM maintenanceCoolerView M JOIN sales_rep S ON M.sales_rep_id = S.sales_rep_id JOIN occd O ON S.occd_id = O.occd_id");
             
             // get columns info
             ResultSetMetaData rsmd = rs.getMetaData();
