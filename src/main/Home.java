@@ -101,7 +101,6 @@ public class Home extends javax.swing.JFrame {
         maintenanceCoolers_jButton1 = new javax.swing.JButton();
         gatePasss_jButton = new javax.swing.JButton();
         readyForShipping_jButton1 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         Data_jPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -309,13 +308,6 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout Button_jPanelLayout = new javax.swing.GroupLayout(Button_jPanel);
         Button_jPanel.setLayout(Button_jPanelLayout);
         Button_jPanelLayout.setHorizontalGroup(
@@ -335,10 +327,6 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(gatePasss_jButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(readyForShipping_jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(Button_jPanelLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         Button_jPanelLayout.setVerticalGroup(
             Button_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,8 +353,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(maintenanceCoolers_jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(Reports_jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         jSplitPane1.setLeftComponent(Button_jPanel);
@@ -645,16 +632,6 @@ Shipping shipping = new Shipping();
        jSplitPane1.setRightComponent( shipping);        // TODO add your handling code here:
     }//GEN-LAST:event_readyForShipping_jButton1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         try {
-            coolerImport();        // TODO add your handling code here:
-        } catch (SQLException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
@@ -769,7 +746,6 @@ private void coolerImport() throws FileNotFoundException, SQLException, IOExcept
     public javax.swing.JTextField Search_jTextField;
     private javax.swing.JButton Update_info_jButton;
     private javax.swing.JButton gatePasss_jButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

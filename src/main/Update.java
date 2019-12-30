@@ -367,8 +367,7 @@ OutletNumber_jTextField.setText("");
             System.out.println("JOptionPane closed");
         }
         
- coolerType_combobox.removeItemAt(0);
- customer_jComboBox.removeItemAt(0);
+ 
 
                 Fillcombo();//methods for listing all cooler serial available on combobox
         generateGatepass(12);
