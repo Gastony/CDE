@@ -27,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -34,7 +35,7 @@ import org.apache.poi.ss.usermodel.Cell;
  */
 public class Update extends javax.swing.JPanel {
 
-    
+     AutoCompleteDecorator decorator;
     public Update() {
         initComponents();
         Fillcombo();//methods for listing all cooler serial availablenon combobox
@@ -42,6 +43,7 @@ public class Update extends javax.swing.JPanel {
       //Fillinfo();
       populateCustomer();
         Fillcombo();
+                AutoCompleteDecorator.decorate(customer_jComboBox);
     
  
   
@@ -131,6 +133,7 @@ public class Update extends javax.swing.JPanel {
 
         jLabel11.setText("Gate pass");
 
+        customer_jComboBox.setEditable(true);
         customer_jComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 customer_jComboBoxActionPerformed(evt);
@@ -472,6 +475,7 @@ ResultSet rs = pst.executeQuery();
 while(rs.next()){
 String name = rs.getString("outlet_owner");
 customer_jComboBox.addItem(name);
+ AutoCompleteDecorator.decorate(customer_jComboBox);
 }
 
 }
